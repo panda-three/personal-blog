@@ -1,5 +1,8 @@
 # Repository Guidelines
 
+## Language Preference
+- 所有来自助手的回复一律使用简体中文。
+
 ## Project Structure & Module Organization
 - `app/`: Next.js App Router entry points (home, blog pages, API routes, auth) plus global layout and styles in `app/globals.css`.
 - `components/`: Shared UI (Navbar, Hero, Footer, grids) and MDX helpers under `components/mdx/`; prefer reusing these before creating new primitives.

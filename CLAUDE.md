@@ -117,10 +117,56 @@ After setting up `.env`:
 - Mock external services (Supabase, Prisma) rather than hitting real databases
 - Run `npm run test` with optional `--coverage` flag
 
-## Deployment Notes
+## Vercel 部署指南
 
-- Designed for Vercel deployment
-- Set all environment variables in Vercel project settings
-- Prisma migrations run automatically on Vercel builds via `prisma generate` in `postinstall`
-- Configure Supabase Row Level Security policies as needed for production
-- Can integrate Vercel Analytics and Log Drains for monitoring
+### 环境变量配置
+
+在 Vercel 项目设置中添加以下环境变量:
+
+```bash
+DATABASE_URL=          # Supabase Postgres 连接串 (pooled)
+DIRECT_URL=           # Supabase Postgres 直连串 (用于 migrations)
+NEXTAUTH_URL=         # 部署后的完整 URL，如 https://your-app.vercel.app
+NEXTAUTH_SECRET=      # 使用 openssl rand -base64 32 生成
+GITHUB_CLIENT_ID=     # GitHub OAuth App Client ID
+GITHUB_CLIENT_SECRET= # GitHub OAuth App Client Secret
+```
+
+### GitHub OAuth 配置
+
+1. 访问 https://github.com/settings/developers 创建新的 OAuth App
+2. **Homepage URL**: 填写 Vercel 部署后的域名，如 `https://your-app.vercel.app`
+3. **Authorization callback URL**: 填写 `https://your-app.vercel.app/api/auth/callback/github`
+4. 将生成的 Client ID 和 Client Secret 添加到 Vercel 环境变量
+
+### 构建配置
+
+项目已配置 `postinstall` 脚本自动运行 `prisma generate`，确保 Prisma Client 在 Vercel 构建时正确生成。
+
+### 常见部署问题
+
+1. **Prisma Client 未生成错误**
+   - 已通过 `package.json` 中的 `postinstall: "prisma generate"` 解决
+   - Vercel 会在 `npm install` 后自动执行此命令
+
+2. **NextAuth 类型错误**
+   - 使用 `import NextAuth from 'next-auth/next'` (App Router 正确导入方式)
+   - Session strategy 使用 `'jwt' as const` 确保类型安全
+
+3. **网络访问限制 (中国大陆)**
+   - 本地开发时需要配置代理访问 GitHub OAuth
+   - 启动开发服务器: `HTTP_PROXY=http://127.0.0.1:7890 HTTPS_PROXY=http://127.0.0.1:7890 npm run dev`
+   - Vercel 部署后无此问题
+
+### Supabase 数据库配置
+
+1. 在 Supabase 项目中启用 Row Level Security (RLS)
+2. 根据需要配置表的访问策略 (Policy)
+3. 使用 Connection Pooling 的连接串作为 `DATABASE_URL`
+4. 使用 Direct Connection 的连接串作为 `DIRECT_URL`
+
+### 监控与分析
+
+- 可集成 Vercel Analytics 进行访问分析
+- 可配置 Log Drains 进行日志监控
+- Prisma Studio 可用于生产数据库的可视化管理 (谨慎使用)
