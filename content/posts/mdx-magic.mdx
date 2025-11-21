@@ -1,0 +1,32 @@
+---
+title: "MDX 让文章成为界面的一部分"
+excerpt: "Markdown 的顺手 + React 组件的表达力，让写作与展示不再割裂。"
+date: "2024-09-12"
+tags:
+  - mdx
+  - react
+  - ux
+featured: true
+---
+
+写博客时我经常卡在「要不要做个组件演示」的纠结里。用 MDX 后，**没有理由不用**。
+
+<PulseCard title="互动组件嵌入率" metric="46%" hint="一半以上的段落都有小互动" />
+
+## 写作体验更好的几个技巧
+
+- **组件库小而美**：提前写好 `Callout`、`PulseCard` 之类的小部件  
+- **少用默认字体**：正文用 Grotesk，代码用 Plex Mono  
+- **图片懒加载**：Next 的 `<Image>` 默认搞定
+
+<AccentCallout title="MDX 工作流" tone="blue">
+  写作时专注内容；构建时通过 `compileMDX` 注入组件；渲染时在 App Router 里直接读。
+</AccentCallout>
+
+## 运营也能标准化
+
+1. 前置数据：`featured: true` 直接参与首页推荐
+2. 标签系统：`tags` 由 Prisma 存储，MDX 负责展示
+3. 版本：推送到 Git 后由 Vercel 自动部署，Revalidate 不再手动触发
+
+尾巴：写博客本身也是用户体验设计。MDX 让体验向开发者倾斜，你可以更快地发布想法。

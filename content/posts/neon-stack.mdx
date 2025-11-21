@@ -1,0 +1,40 @@
+---
+title: "Neon Stack：用 Next.js + Supabase 写出自带光感的博客"
+excerpt: "打造个人网站的偏爱配置：Next.js App Router、MDX、Tailwind、Prisma 直连 Supabase，再配一个大胆的视觉方向。"
+date: "2024-10-01"
+tags:
+  - nextjs
+  - supabase
+  - design
+featured: true
+---
+
+在独立开发的世界里，**速度与风格** 都很重要。下面是我最近升级博客的核心思路，能让文章、作品、数据和登录体系保持同样的手感。
+
+<AccentCallout title="核心栈" tone="pink">
+  Next.js App Router + Tailwind + Framer Motion 负责表现力；Prisma 直连 Supabase Postgres；next-auth 管理会话；MDX 让文章插入组件。
+</AccentCallout>
+
+## 为什么直连 Supabase
+
+- Postgres + Storage + 行级权限，够现代也够省心  
+- Prisma schema 迁移简单，自动生成 typed client  
+- 后台界面能肉眼看到每次改动，排查状态快
+
+<PulseCard title="部署速度" metric="~3 分钟" hint="Vercel 连上 Git，推送即上线" />
+
+## 设计语言
+
+- 视觉：深色 + 高饱和霓虹，拒绝平庸灰
+- 网格 + 模糊玻璃：给信息块分区，同时保持空气感
+- 动画：进入时有节奏，悬浮时微小反馈即可
+
+## 数据与发布流
+
+1. MDX 写作，前置 Frontmatter 控制标签、精选
+2. Prisma 读取 Supabase 数据，补充互动和统计
+3. 通过 API route 暴露轻量接口，例如 `/api/posts`
+
+<AccentCallout title="上线建议" tone="green">
+  设置 RLS（Row Level Security）后，再给服务账号 `/api` 使用的 role。
+</AccentCallout>
