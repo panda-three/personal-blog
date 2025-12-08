@@ -65,11 +65,11 @@ function DeleteButton() {
 export function PostForm({ mode, post }: PostFormProps) {
   const router = useRouter();
   const initialFormState: PostFormState = { status: 'idle' };
-  const [state, formAction] = useFormState<PostFormState>(
+  const [state, formAction] = useFormState<PostFormState, FormData>(
     mode === 'create' ? createPostAction : updatePostAction,
     initialFormState,
   );
-  const [deleteState, deleteAction] = useFormState<PostFormState>(
+  const [deleteState, deleteAction] = useFormState<PostFormState, FormData>(
     deletePostAction,
     initialFormState,
   );
