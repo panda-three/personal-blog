@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export function AboutSection() {
   return (
     <section className="ink-panel glow grid gap-6 rounded-3xl border border-slate-100 bg-white p-6 md:grid-cols-[1.2fr_1fr]" id="about">
@@ -23,18 +25,23 @@ export function AboutSection() {
         <ul className="mt-3 space-y-2">
           <li className="flex items-center justify-between">
             <span>邮件</span>
-            <span className="text-neon-blue hover:text-neon-pink">
-              （待补充邮箱）
-            </span>
+            <a className="text-neon-blue hover:text-neon-pink" href="mailto:zhoulei577@gmail.com">
+              zhoulei577@gmail.com
+            </a>
           </li>
-          <li className="flex items-center justify-between">
+          <li className="flex items-center justify-between gap-3">
             <span>微信</span>
-            <span className="text-neon-blue hover:text-neon-pink">（待补充微信号/二维码）</span>
+            <div className="flex items-center gap-3">
+              <span className="text-neon-blue">扫码添加</span>
+              <div className="relative h-12 w-12 overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+                <Image alt="微信二维码" className="object-cover" fill sizes="48px" src="/wechat-qr.png" />
+              </div>
+            </div>
           </li>
           <li className="flex items-center justify-between">
             <span>GitHub</span>
-            <a className="text-neon-blue hover:text-neon-pink" href="https://github.com" target="_blank" rel="noreferrer">
-              @yourhandle
+            <a className="text-neon-blue hover:text-neon-pink" href="https://github.com/panda-three" target="_blank" rel="noreferrer">
+              @panda-three
             </a>
           </li>
         </ul>
