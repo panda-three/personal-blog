@@ -16,8 +16,8 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
     <section className="space-y-4" id="projects">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm uppercase tracking-[0.18em] text-white/50">个人项目</p>
-          <h2 className="text-2xl font-semibold text-white">正在打磨的作品</h2>
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-500">个人项目</p>
+          <h2 className="text-2xl font-semibold text-slate-900">代表项目与解决方案</h2>
         </div>
         <Link
           href="/projects"
@@ -30,33 +30,33 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
         {projects.map((project, index) => (
           <motion.div
             key={project.title}
-            className="ink-panel glow flex h-full flex-col rounded-2xl border border-white/10 bg-white/5 p-5"
+            className="ink-panel glow flex h-full flex-col rounded-2xl border border-slate-100 bg-white p-5"
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.05 }}
           >
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-white">{project.title}</h3>
+              <h3 className="text-lg font-semibold text-slate-900">{project.title}</h3>
               {project.status ? (
                 <span
                   className={cn(
                     'rounded-full px-3 py-1 text-xs uppercase tracking-[0.18em]',
                     project.status === 'live'
-                      ? 'bg-neon-green/20 text-neon-green'
+                      ? 'bg-neon-green/20 text-emerald-700'
                       : project.status === 'beta'
-                        ? 'bg-neon-blue/20 text-neon-blue'
-                        : 'bg-neon-pink/20 text-neon-pink',
+                        ? 'bg-neon-blue/20 text-sky-700'
+                        : 'bg-neon-pink/20 text-rose-700',
                   )}
                 >
                   {statusCopy[project.status]}
                 </span>
               ) : null}
             </div>
-            <p className="mt-3 text-sm text-white/70">{project.description}</p>
+            <p className="mt-3 text-sm text-slate-700">{project.description}</p>
             <div className="mt-4 flex flex-wrap gap-2">
               {project.stack.map((item) => (
-                <span key={item} className="rounded-full bg-white/5 px-3 py-1 text-xs text-white/60">
+                <span key={item} className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-700">
                   {item}
                 </span>
               ))}
@@ -69,7 +69,7 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
                 查看项目 →
               </Link>
             ) : (
-              <p className="mt-auto pt-4 text-xs uppercase tracking-[0.18em] text-white/40">
+              <p className="mt-auto pt-4 text-xs uppercase tracking-[0.18em] text-slate-400">
                 正在打磨
               </p>
             )}

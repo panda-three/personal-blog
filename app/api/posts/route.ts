@@ -1,12 +1,18 @@
 import { NextResponse } from 'next/server';
-import { getAllPosts } from '@/lib/mdx';
+import { fetchPublishedPosts } from '@/lib/posts';
+
+export const revalidate = 0;
 
 export async function GET() {
-  const posts = await getAllPosts();
+  const posts = await fetchPublishedPosts();
   return NextResponse.json(
     posts.map((post) => ({
       slug: post.slug,
-      ...post.frontmatter,
+      title: post.title,
+      excerpt: post.excerpt,
+      date: post.publishedAt,
+      tags: post.tags,
+      featured: post.featured,
     })),
     {
       headers: {

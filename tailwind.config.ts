@@ -17,19 +17,19 @@ const config: Config = {
       },
       colors: {
         neon: {
-          pink: '#ff5fc1',
-          green: '#7af8c4',
-          blue: '#66d9ff',
+          pink: '#ff7a8a',
+          green: '#2dd4a5',
+          blue: '#38bdf8',
           dark: '#0a0c10',
         },
-        ink: '#0a0b10',
+        ink: '#f7f8ff',
       },
       backgroundImage: {
-        grid: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.12) 1px, transparent 0)',
-        glow: 'linear-gradient(120deg, rgba(255,95,193,0.25), rgba(102,217,255,0.15), rgba(122,248,196,0.1))',
+        grid: 'radial-gradient(circle at 1px 1px, rgba(15,23,42,0.12) 1px, transparent 0)',
+        glow: 'linear-gradient(135deg, rgba(255,186,99,0.35), rgba(82,168,255,0.25), rgba(255,122,138,0.25))',
       },
       boxShadow: {
-        neon: '0 10px 60px rgba(255,95,193,0.15), 0 10px 40px rgba(102,217,255,0.15)',
+        neon: '0 12px 50px rgba(255,186,99,0.24), 0 10px 40px rgba(82,168,255,0.18)',
       },
     },
   },

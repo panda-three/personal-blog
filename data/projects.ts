@@ -8,22 +8,21 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    title: 'Pulseboard',
-    description: '一块给独立开发者的仪表盘，整合 Vercel、Supabase 与支付数据，自动生成周报。',
-    stack: ['Next.js', 'Supabase', 'Edge Functions', 'Tailwind'],
+    title: '抽奖微信小程序',
+    description: '用于品牌活动与社群增长的抽奖小程序，AI 生成文案与素材，实时抽奖、留资与数据看板。',
+    stack: ['微信小程序', 'Node.js/TS', 'AI 生成', 'Analytics'],
     status: 'live',
-    link: 'https://vercel.com',
   },
   {
-    title: 'Studio Notes',
-    description: 'MDX 驱动的知识库，支持交互组件和代码片段，写完直接推送到生产。',
-    stack: ['Next.js', 'MDX', 'Prisma', 'Vercel KV'],
+    title: '分销系统',
+    description: '支持多级分销、订单追踪、实时佣金结算和后台看板，适配出海业务的渠道裂变场景。',
+    stack: ['Next.js', 'Prisma', 'Supabase', '队列/定时任务'],
     status: 'beta',
   },
   {
-    title: 'Neon UI Kit',
-    description: '一套面向夜间场景的 UI 组件，强调 Grotesk 字体和霓虹高光，适配设计师与前端协作。',
-    stack: ['Storybook', 'Framer Motion', 'Tailwind'],
+    title: 'CRM 系统',
+    description: '线索管理与自动跟进，内置线索评分、任务分配，AI 生成跟进话术/邮件，提升响应速度与转化率。',
+    stack: ['Next.js', 'Prisma', 'NextAuth', 'AI 文案生成'],
     status: 'building',
   },
 ];

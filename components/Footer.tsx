@@ -1,9 +1,9 @@
 export default function Footer() {
   return (
-    <footer className="mb-6 text-sm text-white/50">
+    <footer className="mb-6 text-sm text-slate-500">
       <div className="ink-panel mt-6 rounded-3xl px-6 py-5">
         <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-          <p className="font-semibold text-white/80">保持好奇，保持手感。</p>
+          <p className="font-semibold text-slate-800">保持好奇，保持手感。</p>
           <div className="flex items-center gap-4">
             <a
               className="transition hover:text-neon-pink"

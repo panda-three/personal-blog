@@ -1,11 +1,15 @@
-import fs from 'fs/promises';
-import path from 'path';
 import type { ReactElement } from 'react';
 import { compileMDX } from 'next-mdx-remote/rsc';
-import remarkGfm from 'remark-gfm';
-import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm';
 import { mdxComponents } from '@/components/mdx/mdx-components';
+import type { PostRecord } from './posts';
+import {
+  fetchFeaturedPosts,
+  fetchPublishedPostBySlug,
+  fetchPublishedPosts,
+} from './posts';
 
 export type PostFrontmatter = {
   title: string;
@@ -21,22 +25,22 @@ export type Post = {
   content: ReactElement;
 };
 
-const POSTS_PATH = path.join(process.cwd(), 'content', 'posts');
-
-export async function getPostSlugs() {
-  const entries = await fs.readdir(POSTS_PATH);
-  return entries.filter((file) => file.endsWith('.mdx')).map((file) => file.replace(/\.mdx$/, ''));
+function mapFrontmatter(post: PostRecord): PostFrontmatter {
+  return {
+    title: post.title,
+    excerpt: post.excerpt,
+    date: (post.publishedAt ?? post.createdAt).toISOString(),
+    tags: post.tags || [],
+    featured: post.featured,
+  };
 }
 
-export async function getPostBySlug(slug: string): Promise<Post> {
-  const fullPath = path.join(POSTS_PATH, `${slug}.mdx`);
-  const raw = await fs.readFile(fullPath, 'utf-8');
-
-  const { content, frontmatter } = await compileMDX<PostFrontmatter>({
-    source: raw,
+async function compileContent(source: string) {
+  return compileMDX({
+    source,
     components: mdxComponents,
     options: {
-      parseFrontmatter: true,
+      parseFrontmatter: false,
       mdxOptions: {
         remarkPlugins: [remarkGfm],
         rehypePlugins: [
@@ -52,23 +56,50 @@ export async function getPostBySlug(slug: string): Promise<Post> {
       },
     },
   });
+}
+
+export async function getPostSlugs() {
+  const posts = await fetchPublishedPosts();
+  return posts.map((post) => post.slug);
+}
+
+export async function getPostBySlug(slug: string): Promise<Post | null> {
+  const post = await fetchPublishedPostBySlug(slug);
+  if (!post) return null;
+
+  const { content } = await compileContent(post.body);
 
   return {
-    slug,
-    frontmatter,
+    slug: post.slug,
+    frontmatter: mapFrontmatter(post),
     content,
   };
 }
 
 export async function getAllPosts() {
-  const slugs = await getPostSlugs();
-  const posts = await Promise.all(slugs.map((slug) => getPostBySlug(slug)));
-  return posts.sort(
-    (a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime(),
+  const posts = await fetchPublishedPosts();
+  return Promise.all(
+    posts.map(async (post) => {
+      const { content } = await compileContent(post.body);
+      return {
+        slug: post.slug,
+        frontmatter: mapFrontmatter(post),
+        content,
+      };
+    }),
   );
 }
 
 export async function getFeaturedPosts(limit = 3) {
-  const posts = await getAllPosts();
-  return posts.filter((post) => post.frontmatter.featured).slice(0, limit);
+  const posts = await fetchFeaturedPosts(limit);
+  return Promise.all(
+    posts.map(async (post) => {
+      const { content } = await compileContent(post.body);
+      return {
+        slug: post.slug,
+        frontmatter: mapFrontmatter(post),
+        content,
+      };
+    }),
+  );
 }

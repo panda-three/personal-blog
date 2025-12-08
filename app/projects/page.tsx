@@ -2,38 +2,38 @@ import Link from 'next/link';
 import { projects } from '@/data/projects';
 
 export const metadata = {
-  title: '项目 - Neon Journal',
-  description: '个人项目长清单，包含上线进度与技术栈。',
+  title: '项目 - AI 出海与教育案例',
+  description: '代表性项目与实验，涵盖抽奖小程序、分销系统、CRM。',
 };
 
 export default function ProjectsPage() {
   return (
     <div className="space-y-6">
-      <div className="ink-panel glow rounded-3xl border border-white/10 bg-white/5 p-6">
-        <p className="text-sm uppercase tracking-[0.18em] text-white/50">项目</p>
-        <h1 className="mt-2 text-3xl font-semibold text-white">心血作品与实验</h1>
-        <p className="mt-2 max-w-3xl text-white/70">
-          这些项目多数用 Next.js + Supabase 打造，尽量保持上线次数高、反馈周期短。
+      <div className="ink-panel glow rounded-3xl border border-slate-100 bg-white p-6">
+        <p className="text-xs uppercase tracking-[0.18em] text-slate-500">项目</p>
+        <h1 className="mt-2 text-3xl font-semibold text-slate-900">代表项目与实验</h1>
+        <p className="mt-2 max-w-3xl text-slate-700">
+          聚焦客户价值的可落地方案：抽奖小程序、分销系统、CRM。保持上线频率，高速获取反馈。
         </p>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         {projects.map((project) => (
           <div
             key={project.title}
-            className="ink-panel glow flex h-full flex-col rounded-2xl border border-white/10 bg-white/5 p-5"
+            className="ink-panel glow flex h-full flex-col rounded-2xl border border-slate-100 bg-white p-5"
           >
             <div className="flex items-center justify-between">
-              <h3 className="text-xl font-semibold text-white">{project.title}</h3>
+              <h3 className="text-xl font-semibold text-slate-900">{project.title}</h3>
               {project.status ? (
-                <span className="rounded-full bg-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/70">
+                <span className="rounded-full bg-slate-100 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-slate-600">
                   {project.status}
                 </span>
               ) : null}
             </div>
-            <p className="mt-3 text-sm text-white/70">{project.description}</p>
+            <p className="mt-3 text-sm text-slate-700">{project.description}</p>
             <div className="mt-4 flex flex-wrap gap-2">
               {project.stack.map((item) => (
-                <span key={item} className="rounded-full bg-white/5 px-3 py-1 text-xs text-white/60">
+                <span key={item} className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-700">
                   {item}
                 </span>
               ))}
@@ -46,7 +46,7 @@ export default function ProjectsPage() {
                 查看项目 →
               </Link>
             ) : (
-              <p className="mt-auto pt-4 text-xs uppercase tracking-[0.18em] text-white/40">
+              <p className="mt-auto pt-4 text-xs uppercase tracking-[0.18em] text-slate-400">
                 正在打磨
               </p>
             )}

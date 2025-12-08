@@ -33,8 +33,8 @@ export function AccentCallout({
       viewport={{ once: true }}
       transition={{ duration: 0.3 }}
     >
-      <p className="mb-1 text-xs uppercase tracking-[0.2em] text-white/80">{title}</p>
-      <div className="text-white/70">{children}</div>
+      <p className="mb-1 text-xs uppercase tracking-[0.2em] text-slate-700">{title}</p>
+      <div className="text-slate-700">{children}</div>
     </motion.div>
   );
 }

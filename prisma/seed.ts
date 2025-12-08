@@ -26,6 +26,29 @@ async function main() {
       creatorId: author.id,
     },
   });
+
+  await prisma.post.upsert({
+    where: { slug: 'welcome' },
+    update: {},
+    create: {
+      slug: 'welcome',
+      title: '欢迎来到 Neon Journal',
+      excerpt: '用后台可视化管理文章，支持 MDX 与精选展示。',
+      body: `# 你好，编辑器！
+
+现在可以在 /admin/posts 登录并编辑文章。正文支持 **MDX**，可以直接引用组件或写 JSX。
+
+- 通过「发布」切换草稿
+- 勾选「精选」会展示在首页精选区域
+- 标签用逗号分隔，方便前台展示
+`,
+      tags: ['demo', 'mdx'],
+      featured: true,
+      published: true,
+      publishedAt: new Date('2024-10-01'),
+      authorId: author.id,
+    },
+  });
 }
 
 main()
