@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getServerSession } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { fetchAllPosts } from '@/lib/posts';
 import { AuthWall } from './auth-wall';

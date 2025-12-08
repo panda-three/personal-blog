@@ -1,6 +1,6 @@
 'use server';
 
-import { getServerSession } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { authOptions } from '@/lib/auth';
