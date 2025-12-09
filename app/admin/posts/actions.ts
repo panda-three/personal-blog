@@ -15,31 +15,7 @@ export type PostFormState = {
 
 const postSchema = z.object({
   title: z.string().trim().min(1, '标题必填'),
-  slug: z
-    .string()
-    .trim()
-    .min(1, 'Slug 必填')
-    .regex(/^[a-z0-9-]+$/i, '仅支持字母、数字和短横线')
-    .transform((value) => value.toLowerCase()),
-  excerpt: z.string().trim().min(1, '摘要必填'),
   body: z.string().trim().min(1, '正文必填'),
-  tags: z.preprocess((value) => {
-    if (!value) return [];
-    if (Array.isArray(value)) return value.filter(Boolean);
-    return value
-      .toString()
-      .split(',')
-      .map((tag) => tag.trim())
-      .filter(Boolean);
-  }, z.array(z.string()).default([])),
-  featured: z.preprocess((value) => value === 'on' || value === true, z.boolean()),
-  published: z.preprocess((value) => value === 'on' || value === true, z.boolean()),
-  publishedAt: z.preprocess((value) => {
-    const fallback = new Date();
-    if (!value) return fallback;
-    const parsed = new Date(value.toString());
-    return Number.isNaN(parsed.getTime()) ? fallback : parsed;
-  }, z.date()),
 });
 
 async function requireSession() {
@@ -59,6 +35,50 @@ function revalidatePosts(slug?: string) {
   }
 }
 
+function buildExcerpt(body: string, limit = 120) {
+  const plain = body
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`[^`]*`/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, ' ')
+    .replace(/\[[^\]]*]\([^)]+\)/g, ' ')
+    .replace(/[#>*_~`]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return plain.slice(0, limit) || '暂无摘要';
+}
+
+function slugifyTitle(title: string) {
+  const base = title
+    .trim()
+    .replace(/[\s_]+/g, '-')
+    .replace(/[^\p{Letter}\p{Number}-]+/gu, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .toLowerCase();
+  return base || 'post';
+}
+
+async function ensureUniqueSlug(title: string, excludeId?: string) {
+  const base = slugifyTitle(title);
+  let candidate = base;
+  let suffix = 1;
+
+  // 防止 slug 冲突：如果存在同名 slug，则自动追加序号
+  // 最终移除表单中的 slug 字段与限制，使用标题自动生成
+  for (;;) {
+    const existing = await prisma.post.findFirst({
+      where: {
+        slug: candidate,
+        ...(excludeId ? { NOT: { id: excludeId } } : {}),
+      },
+      select: { id: true },
+    });
+    if (!existing) return candidate;
+    candidate = `${base}-${suffix}`;
+    suffix += 1;
+  }
+}
+
 export async function createPostAction(
   _prevState: PostFormState,
   formData: FormData,
@@ -70,13 +90,7 @@ export async function createPostAction(
 
   const parsed = postSchema.safeParse({
     title: formData.get('title'),
-    slug: formData.get('slug'),
-    excerpt: formData.get('excerpt'),
     body: formData.get('body'),
-    tags: formData.get('tags'),
-    featured: formData.get('featured'),
-    published: formData.get('published'),
-    publishedAt: formData.get('publishedAt'),
   });
 
   if (!parsed.success) {
@@ -84,10 +98,23 @@ export async function createPostAction(
     return { status: 'error', message: issue?.message || '表单校验失败' };
   }
 
+  const title = parsed.data.title.trim();
+  const body = parsed.data.body.trim();
+  const slug = await ensureUniqueSlug(title);
+  const excerpt = buildExcerpt(body);
+  const now = new Date();
+
   try {
     const post = await prisma.post.create({
       data: {
-        ...parsed.data,
+        title,
+        slug,
+        body,
+        excerpt,
+        tags: [],
+        featured: false,
+        published: true,
+        publishedAt: now,
         authorId: session.user?.id,
       },
     });
@@ -122,13 +149,7 @@ export async function updatePostAction(
 
   const parsed = postSchema.safeParse({
     title: formData.get('title'),
-    slug: formData.get('slug'),
-    excerpt: formData.get('excerpt'),
     body: formData.get('body'),
-    tags: formData.get('tags'),
-    featured: formData.get('featured'),
-    published: formData.get('published'),
-    publishedAt: formData.get('publishedAt'),
   });
 
   if (!parsed.success) {
@@ -138,9 +159,17 @@ export async function updatePostAction(
 
   try {
     const existing = await prisma.post.findUnique({ where: { id }, select: { slug: true } });
+    if (!existing) {
+      return { status: 'error', message: '文章不存在' };
+    }
+
     const post = await prisma.post.update({
       where: { id },
-      data: parsed.data,
+      data: {
+        title: parsed.data.title.trim(),
+        body: parsed.data.body.trim(),
+        excerpt: buildExcerpt(parsed.data.body),
+      },
     });
     if (existing?.slug && existing.slug !== post.slug) {
       revalidatePosts(existing.slug);

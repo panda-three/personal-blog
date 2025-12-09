@@ -36,13 +36,7 @@ export default async function EditPostPage({ params }: { params: Params }) {
           post={{
             id: post.id,
             title: post.title,
-            slug: post.slug,
-            excerpt: post.excerpt,
             body: post.body,
-            tags: post.tags,
-            featured: post.featured,
-            published: post.published,
-            publishedAt: post.publishedAt.toISOString(),
           }}
         />
       </div>

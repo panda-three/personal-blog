@@ -11,22 +11,9 @@ type PostFormProps = {
   post?: {
     id?: string;
     title: string;
-    slug: string;
-    excerpt: string;
     body: string;
-    tags: string[];
-    featured: boolean;
-    published: boolean;
-    publishedAt?: string;
   };
 };
-
-function formatDateInput(value?: string) {
-  if (!value) return '';
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return '';
-  return date.toISOString().slice(0, 10);
-}
 
 function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
@@ -86,65 +73,20 @@ export function PostForm({ mode, post }: PostFormProps) {
     }
   }, [deleteState, router]);
 
-  const tagsValue = (post?.tags || []).join(', ');
-
   return (
     <div className="space-y-4">
       <form action={formAction} className="space-y-5">
         {mode === 'edit' && post?.id ? <input type="hidden" name="id" value={post.id} /> : null}
-        <div className="grid gap-4 md:grid-cols-2">
-          <label className="flex flex-col gap-2">
-            <span className="text-sm font-semibold text-slate-700">标题</span>
-            <input
-              name="title"
-              defaultValue={post?.title || ''}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-inner focus:border-neon-pink focus:outline-none"
-              placeholder="文章标题"
-              required
-            />
-          </label>
-          <label className="flex flex-col gap-2">
-            <span className="text-sm font-semibold text-slate-700">Slug</span>
-            <input
-              name="slug"
-              defaultValue={post?.slug || ''}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-inner focus:border-neon-pink focus:outline-none"
-              placeholder="my-first-post"
-              required
-            />
-          </label>
-        </div>
         <label className="flex flex-col gap-2">
-          <span className="text-sm font-semibold text-slate-700">摘要</span>
-          <textarea
-            name="excerpt"
-            defaultValue={post?.excerpt || ''}
-            className="min-h-[80px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-inner focus:border-neon-pink focus:outline-none"
-            placeholder="一句话说明文章想讲什么"
+          <span className="text-sm font-semibold text-slate-700">标题</span>
+          <input
+            name="title"
+            defaultValue={post?.title || ''}
+            className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-inner focus:border-neon-pink focus:outline-none"
+            placeholder="文章标题"
             required
           />
         </label>
-        <div className="grid gap-4 md:grid-cols-2">
-          <label className="flex flex-col gap-2">
-            <span className="text-sm font-semibold text-slate-700">标签</span>
-            <input
-              name="tags"
-              defaultValue={tagsValue}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-inner focus:border-neon-pink focus:outline-none"
-              placeholder="ai, nextjs, design"
-            />
-            <span className="text-xs text-slate-500">逗号分隔，前端展示为圆角标签</span>
-          </label>
-          <label className="flex flex-col gap-2">
-            <span className="text-sm font-semibold text-slate-700">发布时间</span>
-            <input
-              type="date"
-              name="publishedAt"
-              defaultValue={formatDateInput(post?.publishedAt)}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-inner focus:border-neon-pink focus:outline-none"
-            />
-          </label>
-        </div>
         <label className="flex flex-col gap-2">
           <span className="text-sm font-semibold text-slate-700">正文（MDX）</span>
           <textarea
@@ -155,35 +97,6 @@ export function PostForm({ mode, post }: PostFormProps) {
             required
           />
         </label>
-        <div className="flex flex-wrap items-center gap-4">
-          <label className="flex items-center gap-2 text-sm text-slate-700">
-            <input
-              type="checkbox"
-              name="published"
-              defaultChecked={post?.published}
-              className="h-4 w-4 rounded border-slate-300 text-neon-pink focus:ring-neon-pink"
-            />
-            发布
-          </label>
-          <label className="flex items-center gap-2 text-sm text-slate-700">
-            <input
-              type="checkbox"
-              name="featured"
-              defaultChecked={post?.featured}
-              className="h-4 w-4 rounded border-slate-300 text-neon-pink focus:ring-neon-pink"
-            />
-            精选
-          </label>
-          {post?.published ? (
-            <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-              已发布
-            </span>
-          ) : (
-            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-              草稿
-            </span>
-          )}
-        </div>
         {state.message ? (
           <div
             className={clsx(
