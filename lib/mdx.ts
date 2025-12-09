@@ -9,6 +9,7 @@ import {
   fetchFeaturedPosts,
   fetchPublishedPostBySlug,
   fetchPublishedPosts,
+  fetchPublishedPostsByTag,
 } from './posts';
 
 export type PostFrontmatter = {
@@ -78,6 +79,20 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 
 export async function getAllPosts() {
   const posts = await fetchPublishedPosts();
+  return Promise.all(
+    posts.map(async (post) => {
+      const { content } = await compileContent(post.body);
+      return {
+        slug: post.slug,
+        frontmatter: mapFrontmatter(post),
+        content,
+      };
+    }),
+  );
+}
+
+export async function getPostsByTag(tag: string) {
+  const posts = await fetchPublishedPostsByTag(tag);
   return Promise.all(
     posts.map(async (post) => {
       const { content } = await compileContent(post.body);

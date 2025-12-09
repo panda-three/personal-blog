@@ -48,6 +48,18 @@ export async function fetchFeaturedPosts(limit = 3) {
   });
 }
 
+export async function fetchPublishedPostsByTag(tag: string) {
+  noStore();
+  return prisma.post.findMany({
+    where: { published: true, tags: { has: tag } },
+    select: postSelect,
+    orderBy: [
+      { publishedAt: 'desc' },
+      { createdAt: 'desc' },
+    ],
+  });
+}
+
 export async function fetchAllPosts() {
   noStore();
   return prisma.post.findMany({

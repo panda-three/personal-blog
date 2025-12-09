@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import type { Project } from '@/data/projects';
+import { ProjectAction } from '@/components/ProjectAction';
 import { cn } from '@/lib/utils';
 
 const statusCopy: Record<NonNullable<Project['status']>, string> = {
@@ -61,18 +62,9 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
                 </span>
               ))}
             </div>
-            {project.link ? (
-              <Link
-                href={project.link}
-                className="mt-auto pt-4 text-sm font-semibold text-neon-blue transition hover:text-neon-pink"
-              >
-                查看项目 →
-              </Link>
-            ) : (
-              <p className="mt-auto pt-4 text-xs uppercase tracking-[0.18em] text-slate-400">
-                正在打磨
-              </p>
-            )}
+            <div className="mt-auto pt-4">
+              <ProjectAction project={project} />
+            </div>
           </motion.div>
         ))}
       </div>

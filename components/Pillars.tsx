@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -8,9 +9,10 @@ const pillars = [
     title: '自我成长',
     icon: '🌱',
     color: 'from-amber-100 to-amber-50',
-    chips: ['时间管理', '科学复盘', '知识库'],
+    chips: ['时间管理', '科学复盘', '刻意练习'],
     summary: '用实践论和数据化习惯保持迭代，写周报/年报，沉淀模板。',
     metric: '本周 3 次复盘',
+    href: '/focus/self-growth',
   },
   {
     title: 'AI 编程（出海）',
@@ -19,6 +21,7 @@ const pillars = [
     chips: ['出海产品', 'AI 赋能', '快速实验'],
     summary: '围绕用户价值做产品，保持上线节奏，记录实验与结果。',
     metric: '2 个迭代进行中',
+    href: '/focus/ai-shipping',
   },
   {
     title: 'AI 教育',
@@ -27,6 +30,7 @@ const pillars = [
     chips: ['备课', '授课', '工具包'],
     summary: '打磨 AI 备课/讲稿流程，给教师/学员提供可用的工具与案例。',
     metric: '备课 1 套新课件',
+    href: '/focus/ai-education',
   },
 ];
 
@@ -43,41 +47,56 @@ export function Pillars() {
         </div>
       </div>
       <div className="grid gap-4 md:grid-cols-3">
-        {pillars.map((pillar, index) => (
-          <motion.div
-            key={pillar.title}
-            className={cn(
-              'ink-panel glow relative flex h-full flex-col overflow-hidden rounded-2xl p-5',
-              'border border-slate-100 bg-gradient-to-br',
-              pillar.color,
-            )}
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.05 }}
-          >
-            <div className="flex items-center gap-3">
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-lg shadow-sm">
-                {pillar.icon}
-              </span>
-              <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Focus</p>
-                <h3 className="text-lg font-semibold text-slate-900">{pillar.title}</h3>
-              </div>
-            </div>
-            <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold text-slate-700">
-              {pillar.chips.map((chip) => (
-                <span key={chip} className="rounded-full bg-white/70 px-3 py-1 shadow-sm">
-                  {chip}
+        {pillars.map((pillar, index) => {
+          const card = (
+            <motion.div
+              className={cn(
+                'ink-panel glow relative flex h-full flex-col overflow-hidden rounded-2xl p-5',
+                'border border-slate-100 bg-gradient-to-br',
+                pillar.color,
+              )}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.05 }}
+            >
+              <div className="flex items-center gap-3">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-lg shadow-sm">
+                  {pillar.icon}
                 </span>
-              ))}
+                <div>
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Focus</p>
+                  <h3 className="text-lg font-semibold text-slate-900">{pillar.title}</h3>
+                </div>
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold text-slate-700">
+                {pillar.chips.map((chip) => (
+                  <span key={chip} className="rounded-full bg-white/70 px-3 py-1 shadow-sm">
+                    {chip}
+                  </span>
+                ))}
+              </div>
+              <p className="mt-3 text-sm text-slate-700">{pillar.summary}</p>
+              <div className="mt-auto pt-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600">
+                {pillar.metric}
+              </div>
+            </motion.div>
+          );
+
+          if (pillar.href) {
+            return (
+              <Link key={pillar.title} href={pillar.href} className="block h-full">
+                {card}
+              </Link>
+            );
+          }
+
+          return (
+            <div key={pillar.title} className="h-full">
+              {card}
             </div>
-            <p className="mt-3 text-sm text-slate-700">{pillar.summary}</p>
-            <div className="mt-auto pt-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600">
-              {pillar.metric}
-            </div>
-          </motion.div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

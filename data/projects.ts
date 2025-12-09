@@ -4,6 +4,12 @@ export type Project = {
   stack: string[];
   link?: string;
   status?: 'live' | 'building' | 'beta';
+  cta?: {
+    type: 'qr';
+    label: string;
+    image: string;
+    description?: string;
+  };
 };
 
 export const projects: Project[] = [
@@ -12,6 +18,12 @@ export const projects: Project[] = [
     description: '用于品牌活动与社群增长的抽奖小程序，AI 生成文案与素材，实时抽奖、留资与数据看板。',
     stack: ['微信小程序', 'Node.js/TS', 'AI 生成', 'Analytics'],
     status: 'live',
+    cta: {
+      type: 'qr',
+      label: '扫码体验',
+      image: '/lottery-miniapp-qr.png',
+      description: '微信扫码体验抽奖小程序 Demo',
+    },
   },
   {
     title: '分销系统',

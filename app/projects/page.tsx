@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { projects } from '@/data/projects';
+import { ProjectAction } from '@/components/ProjectAction';
 
 export const metadata = {
   title: '项目 - AI 出海与教育案例',
@@ -38,18 +38,9 @@ export default function ProjectsPage() {
                 </span>
               ))}
             </div>
-            {project.link ? (
-              <Link
-                href={project.link}
-                className="mt-auto pt-4 text-sm font-semibold text-neon-blue transition hover:text-neon-pink"
-              >
-                查看项目 →
-              </Link>
-            ) : (
-              <p className="mt-auto pt-4 text-xs uppercase tracking-[0.18em] text-slate-400">
-                正在打磨
-              </p>
-            )}
+            <div className="mt-auto pt-4">
+              <ProjectAction project={project} />
+            </div>
           </div>
         ))}
       </div>
